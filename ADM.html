@@ -1,0 +1,1895 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Agendar unhas - Samalia Profissional de Estética">
+    <meta name="keywords" content="Agendar,unhas,estetica,manicure,pedicure">
+    <meta name="author" content="Pablo Leal">
+    <title>Samalia - Sistema de Agendamentos</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        h1 {
+            color: #4a1d6d;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            animation: fadeInDown 1s ease;
+        }
+
+        h2 {
+            color: #5a2d7d;
+            font-size: 2em;
+            margin: 30px 0 20px;
+            border-left: 5px solid #9b59b6;
+            padding-left: 15px;
+        }
+
+        h3 {
+            color: #4a1d6d;
+            font-size: 1.5em;
+            margin: 20px 0 15px;
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card-stats {
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .card-stats:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-stats .numero {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #4a1d6d;
+            margin: 10px 0;
+        }
+
+        .card-stats .rotulo {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        /* Painel Admin */
+        .admin-panel {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 2px solid #9b59b6;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .admin-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #9b59b6, #8e44ad);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+        }
+
+        .btn-warning {
+            background: linear-gradient(45deg, #f39c12, #e67e22);
+            color: white;
+        }
+
+        .btn-info {
+            background: linear-gradient(45deg, #00d2d3, #01a3a4);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        /* Formulários */
+        .form-container {
+            display: none;
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 2px solid #9b59b6;
+            animation: slideDown 0.3s ease;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #4a1d6d;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #9b59b6;
+        }
+
+        /* Tabelas */
+        .tabela-container {
+            overflow-x: auto;
+            margin: 20px 0;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e0e0e0;
+            color: #333;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .status-pendente {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-confirmado {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-cancelado {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-concluido {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        .acoes {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .btn-acoes {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .btn-editar {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-excluir {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-status {
+            background: #f39c12;
+            color: white;
+        }
+
+        .btn-visualizar {
+            background: #00d2d3;
+            color: white;
+        }
+
+        .btn-acoes:hover {
+            transform: scale(1.05);
+        }
+
+        /* Galeria */
+        .galeria {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            max-width: 300px;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        /* Dialog */
+        .dialog-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .dialog-box {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.3);
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            z-index: 1001;
+            animation: slideIn 0.4s ease;
+        }
+
+        .dialog-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            justify-content: flex-end;
+        }
+
+        /* Barra de pesquisa */
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 50px;
+            font-size: 1em;
+            min-width: 250px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #9b59b6;
+        }
+
+        /* Filtros */
+        .filtros {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filtro-select {
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.95em;
+            min-width: 150px;
+        }
+
+        hr {
+            border: none;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #9b59b6, transparent);
+            margin: 30px 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -60%);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2em; }
+            h2 { font-size: 1.5em; }
+            .container { padding: 20px; }
+            .admin-header { flex-direction: column; }
+            .admin-buttons { justify-content: center; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>💅 Samalia - Sistema de Agendamentos</h1>
+        
+        <!-- Dashboard -->
+        <div class="dashboard">
+            <div class="card-stats">
+                <div class="rotulo">Total de Agendamentos</div>
+                <div class="numero" id="totalAgendamentos">0</div>
+            </div>
+            <div class="card-stats">
+                <div class="rotulo">Agendamentos Hoje</div>
+                <div class="numero" id="agendamentosHoje">0</div>
+            </div>
+            <div class="card-stats">
+                <div class="rotulo">Pendentes</div>
+                <div class="numero" id="pendentes">0</div>
+            </div>
+            <div class="card-stats">
+                <div class="rotulo">Confirmados</div>
+                <div class="numero" id="confirmados">0</div>
+            </div>
+        </div>
+
+        <!-- Painel Admin -->
+        <div class="admin-panel">
+            <div class="admin-header">
+                <h3>🔧 Painel de Administração</h3>
+                <div class="admin-buttons">
+                    <button class="btn btn-primary" onclick="mostrarFormulario('cliente')">➕ Novo Cliente</button>
+                    <button class="btn btn-success" onclick="mostrarFormulario('agendamento')">📅 Novo Agendamento</button>
+                    <button class="btn btn-secondary" onclick="mostrarFormulario('servico')">💅 Novo Serviço</button>
+                    <button class="btn btn-warning" onclick="exportarDados()">📥 Exportar Dados</button>
+                    <button class="btn btn-info" onclick="importarDados()">📤 Importar Dados</button>
+                    <button class="btn btn-danger" onclick="mostrarDialogConfirmacao('limparDados')">🗑️ Limpar Dados</button>
+                </div>
+            </div>
+
+            <!-- Abas -->
+            <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
+                <button class="btn btn-secondary" onclick="mostrarAba('agendamentos')">📅 Agendamentos</button>
+                <button class="btn btn-secondary" onclick="mostrarAba('clientes')">👥 Clientes</button>
+                <button class="btn btn-secondary" onclick="mostrarAba('servicos')">💅 Serviços</button>
+                <button class="btn btn-secondary" onclick="mostrarAba('historico')">📊 Histórico</button>
+                <button class="btn btn-secondary" onclick="mostrarAba('estatisticas')">📈 Estatísticas</button>
+            </div>
+
+            <!-- Barra de pesquisa global -->
+            <div class="search-bar">
+                <input type="text" class="search-input" id="pesquisaGlobal" placeholder="🔍 Pesquisar em todas as abas..." onkeyup="pesquisarGlobal()">
+                <button class="btn btn-primary" onclick="limparPesquisa()">Limpar</button>
+            </div>
+<div style="text-align: center;">
+            <a href="index.html" class="btn-voltar">← Voltar para Página Inicial</a>
+        </div>
+            <!-- Formulário Cliente -->
+            <div id="formCliente" class="form-container">
+                <h3>👤 Novo Cliente</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Nome completo:</label>
+                        <input type="text" id="clienteNome" placeholder="Digite o nome" required>
+                    </div>
+                    <div class="form-group">
+                        <label>WhatsApp:</label>
+                        <input type="tel" id="clienteWhatsApp" placeholder="(99) 99999-9999" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email:</label>
+                        <input type="email" id="clienteEmail" placeholder="cliente@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Data de nascimento:</label>
+                        <input type="date" id="clienteNascimento">
+                    </div>
+                </div>
+                <div class="dialog-buttons">
+                    <button class="btn btn-danger" onclick="fecharFormulario('cliente')">Cancelar</button>
+                    <button class="btn btn-success" onclick="salvarCliente()">Salvar Cliente</button>
+                </div>
+            </div>
+
+            <!-- Formulário Serviço -->
+            <div id="formServico" class="form-container">
+                <h3>💅 Novo Serviço</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Nome do serviço:</label>
+                        <input type="text" id="servicoNome" placeholder="Ex: Manicure" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Categoria:</label>
+                        <select id="servicoCategoria" required>
+                            <option value="">Selecione uma categoria</option>
+                            <option value="manicure">Manicure</option>
+                            <option value="pedicure">Pedicure</option>
+                            <option value="banho-gel">Banho de Gel</option>
+                            <option value="fibra">Unhas de Fibra</option>
+                            <option value="especiais">Serviços Especiais</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Preço (R$):</label>
+                        <input type="number" id="servicoPreco" step="0.01" min="0" placeholder="0.00" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Duração (min):</label>
+                        <input type="number" id="servicoDuracao" min="15" step="15" value="60" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Descrição:</label>
+                    <textarea id="servicoDescricao" rows="3" placeholder="Descreva o serviço..."></textarea>
+                </div>
+                <div class="dialog-buttons">
+                    <button class="btn btn-danger" onclick="fecharFormulario('servico')">Cancelar</button>
+                    <button class="btn btn-success" onclick="salvarServico()">Salvar Serviço</button>
+                </div>
+           
+            </div>
+
+            <!-- Formulário Agendamento -->
+            <div id="formAgendamento" class="form-container">
+                <h3>📅 Novo Agendamento</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Cliente:</label>
+                        <select id="agendamentoCliente" required>
+                            <option value="">Selecione um cliente</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Serviço:</label>
+                        <select id="agendamentoServico" required onchange="atualizarValorServico()">
+                            <option value="">Selecione um serviço</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Data:</label>
+                        <input type="date" id="agendamentoData" required min="<?php echo date('Y-m-d'); ?>">
+                    </div>
+                    <div class="form-group">
+                        <label>Horário:</label>
+                        <select id="agendamentoHorario" required>
+                            <option value="">Selecione um horário</option>
+                            <option value="09:00">09:00</option>
+                            <option value="10:00">10:00</option>
+                            <option value="11:00">11:00</option>
+                            <option value="14:00">14:00</option>
+                            <option value="15:00">15:00</option>
+                            <option value="16:00">16:00</option>
+                            <option value="17:00">17:00</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Observações:</label>
+                    <textarea id="agendamentoObs" rows="3" placeholder="Observações sobre o agendamento..."></textarea>
+                </div>
+                <div class="dialog-buttons">
+                    <button class="btn btn-danger" onclick="fecharFormulario('agendamento')">Cancelar</button>
+                    <button class="btn btn-success" onclick="salvarAgendamento()">Salvar Agendamento</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Aba Agendamentos -->
+        <div id="abaAgendamentos" class="tabela-container">
+            <div style="padding: 15px; background: #f8f9fa;">
+                <div class="filtros">
+                    <select class="filtro-select" id="filtroStatusAgendamento" onchange="filtrarAgendamentos()">
+                        <option value="">Todos os status</option>
+                        <option value="pendente">Pendentes</option>
+                        <option value="confirmado">Confirmados</option>
+                        <option value="concluido">Concluídos</option>
+                        <option value="cancelado">Cancelados</option>
+                    </select>
+                    <input type="date" class="filtro-select" id="filtroDataAgendamento" onchange="filtrarAgendamentos()">
+                    <button class="btn btn-secondary btn-acoes" onclick="limparFiltrosAgendamento()">Limpar Filtros</button>
+                </div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Serviço</th>
+                        <th>Data</th>
+                        <th>Horário</th>
+                        <th>Status</th>
+                        <th>Valor</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelaAgendamentos">
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 30px;">
+                            Nenhum agendamento encontrado
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Aba Clientes -->
+        <div id="abaClientes" class="tabela-container" style="display: none;">
+            <div style="padding: 15px; background: #f8f9fa;">
+                <div class="filtros">
+                    <input type="text" class="filtro-select" id="filtroNomeCliente" placeholder="Filtrar por nome..." onkeyup="filtrarClientes()">
+                </div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>WhatsApp</th>
+                        <th>Email</th>
+                        <th>Total Agend.</th>
+                        <th>Última Visita</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelaClientes">
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 30px;">
+                            Nenhum cliente cadastrado
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Aba Serviços -->
+        <div id="abaServicos" class="tabela-container" style="display: none;">
+            <div style="padding: 15px; background: #f8f9fa;">
+                <div class="filtros">
+                    <select class="filtro-select" id="filtroCategoriaServico" onchange="filtrarServicos()">
+                        <option value="">Todas as categorias</option>
+                        <option value="manicure">Manicure</option>
+                        <option value="pedicure">Pedicure</option>
+                        <option value="banho-gel">Banho de Gel</option>
+                        <option value="fibra">Unhas de Fibra</option>
+                        <option value="especiais">Serviços Especiais</option>
+                    </select>
+                </div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Serviço</th>
+                        <th>Categoria</th>
+                        <th>Preço</th>
+                        <th>Duração</th>
+                        <th>Descrição</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelaServicos">
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 30px;">
+                            Nenhum serviço cadastrado
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Aba Histórico -->
+        <div id="abaHistorico" class="tabela-container" style="display: none;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Ação</th>
+                        <th>Descrição</th>
+                        <th>Usuário</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelaHistorico">
+                    <tr>
+                        <td colspan="4" style="text-align: center; padding: 30px;">
+                            Nenhum registro no histórico
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Aba Estatísticas -->
+        <div id="abaEstatisticas" class="tabela-container" style="display: none; padding: 20px;">
+            <h3>📈 Estatísticas do Sistema</h3>
+            <div class="dashboard" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                <div class="card-stats">
+                    <div class="rotulo">Faturamento do Mês</div>
+                    <div class="numero" id="faturamentoMes">R$ 0,00</div>
+                </div>
+                <div class="card-stats">
+                    <div class="rotulo">Média por Agendamento</div>
+                    <div class="numero" id="mediaAgendamento">R$ 0,00</div>
+                </div>
+                <div class="card-stats">
+                    <div class="rotulo">Cliente Mais Frequente</div>
+                    <div class="numero" id="clienteFrequente">-</div>
+                </div>
+                <div class="card-stats">
+                    <div class="rotulo">Serviço Mais Procurado</div>
+                    <div class="numero" id="servicoTop">-</div>
+                </div>
+            </div>
+            
+            <h4>📊 Serviços Mais Procurados</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Serviço</th>
+                        <th>Quantidade</th>
+                        <th>% do Total</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelaServicosTop">
+                    <tr>
+                        <td colspan="3" style="text-align: center; padding: 30px;">
+                            Carregando estatísticas...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Galeria -->
+        <h2>📸 Nossos Trabalhos</h2>
+        <div class="galeria">
+            <div class="card">
+                <img src="https://via.placeholder.com/300x250/9b59b6/ffffff?text=Manicure" alt="Manicure">
+                <p>Esmaltação Perfeita</p>
+            </div>
+            <div class="card">
+                <img src="https://via.placeholder.com/300x250/8e44ad/ffffff?text=Banho+de+Gel" alt="Banho de Gel">
+                <p>Banho de Gel</p>
+            </div>
+            <div class="card">
+                <img src="https://via.placeholder.com/300x250/6c3483/ffffff?text=Fibra" alt="Unhas de Fibra">
+                <p>Unhas de Fibra</p>
+            </div>
+        </div>
+
+        <!-- Informações de Contato -->
+        <hr>
+        <div style="text-align: center; padding: 20px;">
+            <p>📞 WhatsApp: (99) 984676312 | 📍 Localização: <a href="https://maps.app.goo.gl/7Ke7zZx1L5xy5kXR8" target="_blank">Clique aqui</a></p>
+            <p>💅 Sistema de Agendamentos v1.0 - Samalia Estética</p>
+        </div>
+    </div>
+
+    <!-- Dialog de confirmação -->
+    <div id="dialogConfirmar" class="dialog-overlay">
+        <div class="dialog-box">
+            <h3 id="dialogTitulo">Confirmar ação</h3>
+            <p id="dialogMensagem">Tem certeza que deseja realizar esta ação?</p>
+            <div class="dialog-buttons">
+                <button class="btn btn-secondary" onclick="fecharDialog()">Cancelar</button>
+                <button class="btn btn-danger" id="dialogConfirmarBtn">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dialog de visualização -->
+    <div id="dialogVisualizar" class="dialog-overlay">
+        <div class="dialog-box">
+            <h3 id="visualizarTitulo">Detalhes</h3>
+            <div id="visualizarConteudo"></div>
+            <div class="dialog-buttons">
+                <button class="btn btn-secondary" onclick="fecharDialogVisualizar()">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Input file oculto para importação -->
+    <input type="file" id="fileInput" accept=".json" style="display: none;">
+
+    <script>
+        // ============= BANCO DE DADOS =============
+        class BancoDeDados {
+            constructor() {
+                this.inicializarDados();
+            }
+
+            inicializarDados() {
+                // Inicializa as coleções se não existirem
+                if (!localStorage.getItem('clientes')) {
+                    const clientesIniciais = [
+                        { id: 1, nome: 'Maria Silva', whatsapp: '(99) 99999-1111', email: 'maria@email.com', nascimento: '1990-05-15', totalAgendamentos: 3, ultimaVisita: '2024-02-15' },
+                        { id: 2, nome: 'Joana Santos', whatsapp: '(99) 99999-2222', email: 'joana@email.com', nascimento: '1985-08-22', totalAgendamentos: 5, ultimaVisita: '2024-02-18' },
+                        { id: 3, nome: 'Ana Oliveira', whatsapp: '(99) 99999-3333', email: 'ana@email.com', nascimento: '1992-11-30', totalAgendamentos: 2, ultimaVisita: '2024-02-10' }
+                    ];
+                    localStorage.setItem('clientes', JSON.stringify(clientesIniciais));
+                }
+
+                if (!localStorage.getItem('servicos')) {
+                    const servicosIniciais = [
+                        { id: 1, nome: 'Manicure Tradicional', categoria: 'manicure', preco: 35.00, duracao: 45, descricao: 'Corte, lixamento e esmaltação' },
+                        { id: 2, nome: 'Pedicure Tradicional', categoria: 'pedicure', preco: 40.00, duracao: 60, descricao: 'Corte, lixamento e esmaltação' },
+                        { id: 3, nome: 'Banho de Gel Mãos', categoria: 'banho-gel', preco: 80.00, duracao: 90, descricao: 'Esmaltação em gel com maior durabilidade' },
+                        { id: 4, nome: 'Unhas de Fibra Média', categoria: 'fibra', preco: 140.00, duracao: 120, descricao: 'Alongamento em fibra de vidro' }
+                    ];
+                    localStorage.setItem('servicos', JSON.stringify(servicosIniciais));
+                }
+
+                if (!localStorage.getItem('agendamentos')) {
+                    const agendamentosIniciais = [
+                        { id: 1, clienteId: 1, servicoId: 1, data: '2024-02-20', horario: '14:00', status: 'confirmado', observacoes: '', valor: 35.00 },
+                        { id: 2, clienteId: 2, servicoId: 3, data: '2024-02-21', horario: '10:00', status: 'pendente', observacoes: 'Cliente nova', valor: 80.00 },
+                        { id: 3, clienteId: 3, servicoId: 4, data: '2024-02-22', horario: '15:00', status: 'confirmado', observacoes: 'Manutenção', valor: 140.00 }
+                    ];
+                    localStorage.setItem('agendamentos', JSON.stringify(agendamentosIniciais));
+                }
+
+                if (!localStorage.getItem('historico')) {
+                    localStorage.setItem('historico', JSON.stringify([]));
+                }
+
+                if (!localStorage.getItem('config')) {
+                    localStorage.setItem('config', JSON.stringify({
+                        nomeProfissional: 'Samalia',
+                        telefone: '(99) 984676312',
+                        horarioInicio: '09:00',
+                        horarioFim: '18:00',
+                        intervalo: 60
+                    }));
+                }
+            }
+
+            // Métodos genéricos
+            get(colecao) {
+                return JSON.parse(localStorage.getItem(colecao)) || [];
+            }
+
+            set(colecao, dados) {
+                localStorage.setItem(colecao, JSON.stringify(dados));
+                this.registrarHistorico('atualização', `Dados de ${colecao} atualizados`);
+                this.atualizarDashboard();
+            }
+
+            adicionar(colecao, item) {
+                const dados = this.get(colecao);
+                item.id = dados.length > 0 ? Math.max(...dados.map(i => i.id)) + 1 : 1;
+                dados.push(item);
+                this.set(colecao, dados);
+                this.registrarHistorico('adição', `Novo item adicionado em ${colecao}: ${JSON.stringify(item)}`);
+                return item;
+            }
+
+            atualizar(colecao, id, novosDados) {
+                const dados = this.get(colecao);
+                const index = dados.findIndex(item => item.id === id);
+                if (index !== -1) {
+                    const itemAntigo = { ...dados[index] };
+                    dados[index] = { ...dados[index], ...novosDados };
+                    this.set(colecao, dados);
+                    this.registrarHistorico('atualização', `Item ID ${id} atualizado em ${colecao}`);
+                    return true;
+                }
+                return false;
+            }
+
+            remover(colecao, id) {
+                const dados = this.get(colecao);
+                const itemRemovido = dados.find(item => item.id === id);
+                const novosDados = dados.filter(item => item.id !== id);
+                this.set(colecao, novosDados);
+                this.registrarHistorico('remoção', `Item ID ${id} removido de ${colecao}: ${JSON.stringify(itemRemovido)}`);
+            }
+
+            buscar(colecao, termo) {
+                const dados = this.get(colecao);
+                return dados.filter(item => 
+                    JSON.stringify(item).toLowerCase().includes(termo.toLowerCase())
+                );
+            }
+
+            registrarHistorico(acao, descricao) {
+                const historico = this.get('historico');
+                historico.unshift({
+                    id: Date.now(),
+                    data: new Date().toLocaleString(),
+                    acao: acao,
+                    descricao: descricao,
+                    usuario: 'Sistema'
+                });
+                if (historico.length > 100) historico.pop(); // Mantém apenas os últimos 100 registros
+                localStorage.setItem('historico', JSON.stringify(historico));
+            }
+
+            limparTodosDados() {
+                localStorage.removeItem('clientes');
+                localStorage.removeItem('servicos');
+                localStorage.removeItem('agendamentos');
+                localStorage.removeItem('historico');
+                this.inicializarDados();
+                this.registrarHistorico('limpeza', 'Todos os dados foram resetados');
+            }
+
+            // Métodos específicos
+            getAgendamentosCompletos() {
+                const agendamentos = this.get('agendamentos');
+                const clientes = this.get('clientes');
+                const servicos = this.get('servicos');
+
+                return agendamentos.map(ag => {
+                    const cliente = clientes.find(c => c.id === ag.clienteId) || { nome: 'Cliente não encontrado' };
+                    const servico = servicos.find(s => s.id === ag.servicoId) || { nome: 'Serviço não encontrado', preco: 0 };
+                    return {
+                        ...ag,
+                        clienteNome: cliente.nome,
+                        servicoNome: servico.nome,
+                        valor: servico.preco || ag.valor
+                    };
+                }).sort((a, b) => new Date(b.data + ' ' + b.horario) - new Date(a.data + ' ' + a.horario));
+            }
+
+            getAgendamentosHoje() {
+                const hoje = new Date().toISOString().split('T')[0];
+                const agendamentos = this.getAgendamentosCompletos();
+                return agendamentos.filter(ag => ag.data === hoje);
+            }
+
+            getAgendamentosPorStatus(status) {
+                const agendamentos = this.get('agendamentos');
+                return agendamentos.filter(ag => ag.status === status);
+            }
+
+            atualizarStatusAgendamento(id, novoStatus) {
+                return this.atualizar('agendamentos', id, { status: novoStatus });
+            }
+
+            getClienteMaisFrequente() {
+                const clientes = this.get('clientes');
+                if (clientes.length === 0) return null;
+                return clientes.sort((a, b) => b.totalAgendamentos - a.totalAgendamentos)[0];
+            }
+
+            getFaturamentoPeriodo(dataInicio, dataFim) {
+                const agendamentos = this.getAgendamentosCompletos();
+                return agendamentos
+                    .filter(ag => ag.data >= dataInicio && ag.data <= dataFim && ag.status === 'confirmado')
+                    .reduce((total, ag) => total + ag.valor, 0);
+            }
+
+            getFaturamentoMes() {
+                const hoje = new Date();
+                const primeiroDia = new Date(hoje.getFullYear(), hoje.getMonth(), 1).toISOString().split('T')[0];
+                const ultimoDia = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0).toISOString().split('T')[0];
+                return this.getFaturamentoPeriodo(primeiroDia, ultimoDia);
+            }
+
+            getMediaPorAgendamento() {
+                const agendamentos = this.getAgendamentosCompletos();
+                const confirmados = agendamentos.filter(ag => ag.status === 'confirmado');
+                if (confirmados.length === 0) return 0;
+                const total = confirmados.reduce((sum, ag) => sum + ag.valor, 0);
+                return total / confirmados.length;
+            }
+
+            getServicosMaisProcurados(limite = 5) {
+                const agendamentos = this.get('agendamentos');
+                const contagem = {};
+                
+                agendamentos.forEach(ag => {
+                    contagem[ag.servicoId] = (contagem[ag.servicoId] || 0) + 1;
+                });
+
+                const servicos = this.get('servicos');
+                const resultado = Object.entries(contagem)
+                    .map(([servicoId, quantidade]) => ({
+                        servico: servicos.find(s => s.id === parseInt(servicoId)),
+                        quantidade
+                    }))
+                    .filter(item => item.servico)
+                    .sort((a, b) => b.quantidade - a.quantidade)
+                    .slice(0, limite);
+
+                return resultado;
+            }
+
+            exportarDados() {
+                const dados = {
+                    clientes: this.get('clientes'),
+                    servicos: this.get('servicos'),
+                    agendamentos: this.get('agendamentos'),
+                    config: this.get('config'),
+                    exportadoEm: new Date().toISOString()
+                };
+                
+                const blob = new Blob([JSON.stringify(dados, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `samalia_backup_${new Date().toISOString().split('T')[0]}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+                
+                this.registrarHistorico('exportação', 'Dados exportados com sucesso');
+            }
+
+            importarDados(arquivo) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        try {
+                            const dados = JSON.parse(e.target.result);
+                            
+                            if (dados.clientes) localStorage.setItem('clientes', JSON.stringify(dados.clientes));
+                            if (dados.servicos) localStorage.setItem('servicos', JSON.stringify(dados.servicos));
+                            if (dados.agendamentos) localStorage.setItem('agendamentos', JSON.stringify(dados.agendamentos));
+                            if (dados.config) localStorage.setItem('config', JSON.stringify(dados.config));
+                            
+                            this.registrarHistorico('importação', 'Dados importados com sucesso');
+                            resolve(true);
+                        } catch (error) {
+                            reject('Arquivo inválido');
+                        }
+                    };
+                    reader.readAsText(arquivo);
+                });
+            }
+
+            atualizarDashboard() {
+                const totalAgendamentos = this.get('agendamentos').length;
+                const agendamentosHoje = this.getAgendamentosHoje().length;
+                const pendentes = this.getAgendamentosPorStatus('pendente').length;
+                const confirmados = this.getAgendamentosPorStatus('confirmado').length;
+
+                document.getElementById('totalAgendamentos').textContent = totalAgendamentos;
+                document.getElementById('agendamentosHoje').textContent = agendamentosHoje;
+                document.getElementById('pendentes').textContent = pendentes;
+                document.getElementById('confirmados').textContent = confirmados;
+            }
+        }
+
+        // ============= INICIALIZAÇÃO =============
+        const db = new BancoDeDados();
+
+        // ============= FUNÇÕES DE INTERFACE =============
+        function mostrarAba(aba) {
+            // Esconde todas as abas
+            document.getElementById('abaAgendamentos').style.display = 'none';
+            document.getElementById('abaClientes').style.display = 'none';
+            document.getElementById('abaServicos').style.display = 'none';
+            document.getElementById('abaHistorico').style.display = 'none';
+            document.getElementById('abaEstatisticas').style.display = 'none';
+
+            // Mostra a aba selecionada
+            switch(aba) {
+                case 'agendamentos':
+                    document.getElementById('abaAgendamentos').style.display = 'block';
+                    atualizarTabelaAgendamentos();
+                    break;
+                case 'clientes':
+                    document.getElementById('abaClientes').style.display = 'block';
+                    atualizarTabelaClientes();
+                    break;
+                case 'servicos':
+                    document.getElementById('abaServicos').style.display = 'block';
+                    atualizarTabelaServicos();
+                    break;
+                case 'historico':
+                    document.getElementById('abaHistorico').style.display = 'block';
+                    atualizarTabelaHistorico();
+                    break;
+                case 'estatisticas':
+                    document.getElementById('abaEstatisticas').style.display = 'block';
+                    atualizarEstatisticas();
+                    break;
+            }
+        }
+
+        function mostrarFormulario(tipo) {
+            fecharTodosFormularios();
+            document.getElementById('form' + tipo.charAt(0).toUpperCase() + tipo.slice(1)).style.display = 'block';
+            
+            if (tipo === 'agendamento') {
+                carregarClientesSelect();
+                carregarServicosSelect();
+                // Define a data mínima como hoje
+                document.getElementById('agendamentoData').min = new Date().toISOString().split('T')[0];
+            }
+        }
+
+        function fecharFormulario(tipo) {
+            document.getElementById('form' + tipo.charAt(0).toUpperCase() + tipo.slice(1)).style.display = 'none';
+        }
+
+        function fecharTodosFormularios() {
+            document.getElementById('formCliente').style.display = 'none';
+            document.getElementById('formServico').style.display = 'none';
+            document.getElementById('formAgendamento').style.display = 'none';
+        }
+
+        function carregarClientesSelect() {
+            const select = document.getElementById('agendamentoCliente');
+            const clientes = db.get('clientes');
+            
+            select.innerHTML = '<option value="">Selecione um cliente</option>';
+            clientes.forEach(cliente => {
+                select.innerHTML += `<option value="${cliente.id}">${cliente.nome}</option>`;
+            });
+        }
+
+        function carregarServicosSelect() {
+            const select = document.getElementById('agendamentoServico');
+            const servicos = db.get('servicos');
+            
+            select.innerHTML = '<option value="">Selecione um serviço</option>';
+            servicos.forEach(servico => {
+                select.innerHTML += `<option value="${servico.id}" data-preco="${servico.preco}">${servico.nome} - R$ ${servico.preco.toFixed(2)}</option>`;
+            });
+        }
+
+        function atualizarValorServico() {
+            const select = document.getElementById('agendamentoServico');
+            const option = select.options[select.selectedIndex];
+            // Não precisa fazer nada por enquanto, o valor será salvo no agendamento
+        }
+
+        function salvarCliente() {
+            const nome = document.getElementById('clienteNome').value;
+            const whatsapp = document.getElementById('clienteWhatsApp').value;
+            const email = document.getElementById('clienteEmail').value;
+            const nascimento = document.getElementById('clienteNascimento').value;
+
+            if (!nome || !whatsapp) {
+                alert('Preencha os campos obrigatórios!');
+                return;
+            }
+
+            const cliente = {
+                nome: nome,
+                whatsapp: whatsapp,
+                email: email,
+                nascimento: nascimento,
+                totalAgendamentos: 0,
+                ultimaVisita: null
+            };
+
+            db.adicionar('clientes', cliente);
+            fecharFormulario('cliente');
+            limparCamposCliente();
+            atualizarTabelaClientes();
+            mostrarAba('clientes');
+            alert('Cliente salvo com sucesso!');
+        }
+
+        function salvarServico() {
+            const nome = document.getElementById('servicoNome').value;
+            const categoria = document.getElementById('servicoCategoria').value;
+            const preco = parseFloat(document.getElementById('servicoPreco').value);
+            const duracao = parseInt(document.getElementById('servicoDuracao').value);
+            const descricao = document.getElementById('servicoDescricao').value;
+
+            if (!nome || !categoria || !preco || !duracao) {
+                alert('Preencha todos os campos obrigatórios!');
+                return;
+            }
+
+            const servico = {
+                nome: nome,
+                categoria: categoria,
+                preco: preco,
+                duracao: duracao,
+                descricao: descricao
+            };
+
+            db.adicionar('servicos', servico);
+            fecharFormulario('servico');
+            limparCamposServico();
+            atualizarTabelaServicos();
+            mostrarAba('servicos');
+            alert('Serviço salvo com sucesso!');
+        }
+
+        function salvarAgendamento() {
+            const clienteId = parseInt(document.getElementById('agendamentoCliente').value);
+            const servicoId = parseInt(document.getElementById('agendamentoServico').value);
+            const data = document.getElementById('agendamentoData').value;
+            const horario = document.getElementById('agendamentoHorario').value;
+            const observacoes = document.getElementById('agendamentoObs').value;
+
+            if (!clienteId || !servicoId || !data || !horario) {
+                alert('Preencha todos os campos obrigatórios!');
+                return;
+            }
+
+            // Verificar se o horário está disponível
+            const agendamentos = db.get('agendamentos');
+            const conflito = agendamentos.some(ag => 
+                ag.data === data && ag.horario === horario && ag.status !== 'cancelado'
+            );
+
+            if (conflito) {
+                alert('Este horário já está ocupado!');
+                return;
+            }
+
+            const servico = db.get('servicos').find(s => s.id === servicoId);
+
+            const agendamento = {
+                clienteId: clienteId,
+                servicoId: servicoId,
+                data: data,
+                horario: horario,
+                status: 'pendente',
+                observacoes: observacoes,
+                valor: servico ? servico.preco : 0
+            };
+
+            db.adicionar('agendamentos', agendamento);
+            
+            // Atualizar dados do cliente
+            const cliente = db.get('clientes').find(c => c.id === clienteId);
+            if (cliente) {
+                cliente.totalAgendamentos = (cliente.totalAgendamentos || 0) + 1;
+                cliente.ultimaVisita = data;
+                db.atualizar('clientes', clienteId, cliente);
+            }
+
+            fecharFormulario('agendamento');
+            limparCamposAgendamento();
+            atualizarTabelaAgendamentos();
+            mostrarAba('agendamentos');
+            alert('Agendamento salvo com sucesso!');
+        }
+
+        function limparCamposCliente() {
+            document.getElementById('clienteNome').value = '';
+            document.getElementById('clienteWhatsApp').value = '';
+            document.getElementById('clienteEmail').value = '';
+            document.getElementById('clienteNascimento').value = '';
+        }
+
+        function limparCamposServico() {
+            document.getElementById('servicoNome').value = '';
+            document.getElementById('servicoCategoria').value = '';
+            document.getElementById('servicoPreco').value = '';
+            document.getElementById('servicoDuracao').value = '60';
+            document.getElementById('servicoDescricao').value = '';
+        }
+
+        function limparCamposAgendamento() {
+            document.getElementById('agendamentoCliente').value = '';
+            document.getElementById('agendamentoServico').value = '';
+            document.getElementById('agendamentoData').value = '';
+            document.getElementById('agendamentoHorario').value = '';
+            document.getElementById('agendamentoObs').value = '';
+        }
+
+        // ============= FUNÇÕES DE TABELA =============
+        function atualizarTabelaAgendamentos() {
+            const agendamentos = db.getAgendamentosCompletos();
+            const tbody = document.getElementById('tabelaAgendamentos');
+            
+            if (agendamentos.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 30px;">Nenhum agendamento encontrado</td></tr>';
+                return;
+            }
+
+            let html = '';
+            agendamentos.forEach(ag => {
+                const statusClass = {
+                    'pendente': 'status-pendente',
+                    'confirmado': 'status-confirmado',
+                    'cancelado': 'status-cancelado',
+                    'concluido': 'status-concluido'
+                }[ag.status] || 'status-pendente';
+
+                html += `
+                    <tr>
+                        <td>${ag.clienteNome}</td>
+                        <td>${ag.servicoNome}</td>
+                        <td>${new Date(ag.data).toLocaleDateString('pt-BR')}</td>
+                        <td>${ag.horario}</td>
+                        <td><span class="status-badge ${statusClass}">${ag.status.toUpperCase()}</span></td>
+                        <td>R$ ${ag.valor.toFixed(2)}</td>
+                        <td class="acoes">
+                            <button class="btn-acoes btn-visualizar" onclick="visualizarAgendamento(${ag.id})">👁️</button>
+                            <button class="btn-acoes btn-editar" onclick="editarAgendamento(${ag.id})">✏️</button>
+                            <button class="btn-acoes btn-status" onclick="alterarStatusAgendamento(${ag.id})">🔄</button>
+                            <button class="btn-acoes btn-excluir" onclick="confirmarExclusao('agendamento', ${ag.id})">🗑️</button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            tbody.innerHTML = html;
+        }
+
+        function atualizarTabelaClientes() {
+            const clientes = db.get('clientes');
+            const tbody = document.getElementById('tabelaClientes');
+            
+            if (clientes.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 30px;">Nenhum cliente cadastrado</td></tr>';
+                return;
+            }
+
+            let html = '';
+            clientes.forEach(cliente => {
+                html += `
+                    <tr>
+                        <td>${cliente.nome}</td>
+                        <td>${cliente.whatsapp}</td>
+                        <td>${cliente.email || '-'}</td>
+                        <td>${cliente.totalAgendamentos || 0}</td>
+                        <td>${cliente.ultimaVisita ? new Date(cliente.ultimaVisita).toLocaleDateString('pt-BR') : '-'}</td>
+                        <td class="acoes">
+                            <button class="btn-acoes btn-visualizar" onclick="visualizarCliente(${cliente.id})">👁️</button>
+                            <button class="btn-acoes btn-editar" onclick="editarCliente(${cliente.id})">✏️</button>
+                            <button class="btn-acoes btn-excluir" onclick="confirmarExclusao('cliente', ${cliente.id})">🗑️</button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            tbody.innerHTML = html;
+        }
+
+        function atualizarTabelaServicos() {
+            const servicos = db.get('servicos');
+            const tbody = document.getElementById('tabelaServicos');
+            
+            if (servicos.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 30px;">Nenhum serviço cadastrado</td></tr>';
+                return;
+            }
+
+            let html = '';
+            servicos.forEach(servico => {
+                const categoriaMap = {
+                    'manicure': 'Manicure',
+                    'pedicure': 'Pedicure',
+                    'banho-gel': 'Banho de Gel',
+                    'fibra': 'Unhas de Fibra',
+                    'especiais': 'Especiais'
+                };
+
+                html += `
+                    <tr>
+                        <td>${servico.nome}</td>
+                        <td>${categoriaMap[servico.categoria] || servico.categoria}</td>
+                        <td>R$ ${servico.preco.toFixed(2)}</td>
+                        <td>${servico.duracao} min</td>
+                        <td>${servico.descricao || '-'}</td>
+                        <td class="acoes">
+                            <button class="btn-acoes btn-visualizar" onclick="visualizarServico(${servico.id})">👁️</button>
+                            <button class="btn-acoes btn-editar" onclick="editarServico(${servico.id})">✏️</button>
+                            <button class="btn-acoes btn-excluir" onclick="confirmarExclusao('servico', ${servico.id})">🗑️</button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            tbody.innerHTML = html;
+        }
+
+        function atualizarTabelaHistorico() {
+            const historico = db.get('historico');
+            const tbody = document.getElementById('tabelaHistorico');
+            
+            if (historico.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 30px;">Nenhum registro no histórico</td></tr>';
+                return;
+            }
+
+            let html = '';
+            historico.forEach(reg => {
+                html += `
+                    <tr>
+                        <td>${reg.data}</td>
+                        <td><span class="status-badge ${reg.acao === 'remoção' ? 'status-cancelado' : 'status-confirmado'}">${reg.acao.toUpperCase()}</span></td>
+                        <td>${reg.descricao}</td>
+                        <td>${reg.usuario}</td>
+                    </tr>
+                `;
+            });
+
+            tbody.innerHTML = html;
+        }
+
+        function atualizarEstatisticas() {
+            // Faturamento do mês
+            const faturamentoMes = db.getFaturamentoMes();
+            document.getElementById('faturamentoMes').textContent = `R$ ${faturamentoMes.toFixed(2)}`;
+
+            // Média por agendamento
+            const media = db.getMediaPorAgendamento();
+            document.getElementById('mediaAgendamento').textContent = `R$ ${media.toFixed(2)}`;
+
+            // Cliente mais frequente
+            const clienteTop = db.getClienteMaisFrequente();
+            document.getElementById('clienteFrequente').textContent = clienteTop ? clienteTop.nome : '-';
+
+            // Serviços mais procurados
+            const servicosTop = db.getServicosMaisProcurados(5);
+            const tbody = document.getElementById('tabelaServicosTop');
+            
+            if (servicosTop.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; padding: 30px;">Nenhum dado disponível</td></tr>';
+                return;
+            }
+
+            const totalAgendamentos = db.get('agendamentos').length;
+            let html = '';
+            servicosTop.forEach(item => {
+                const percentual = totalAgendamentos > 0 ? ((item.quantidade / totalAgendamentos) * 100).toFixed(1) : 0;
+                html += `
+                    <tr>
+                        <td>${item.servico.nome}</td>
+                        <td>${item.quantidade}</td>
+                        <td>${percentual}%</td>
+                    </tr>
+                `;
+            });
+
+            tbody.innerHTML = html;
+
+            // Serviço mais procurado
+            if (servicosTop.length > 0) {
+                document.getElementById('servicoTop').textContent = servicosTop[0].servico.nome;
+            } else {
+                document.getElementById('servicoTop').textContent = '-';
+            }
+        }
+
+        // ============= FUNÇÕES DE PESQUISA E FILTRO =============
+        function pesquisarGlobal() {
+            const termo = document.getElementById('pesquisaGlobal').value;
+            
+            if (termo.length < 3 && termo.length > 0) return;
+
+            // Verifica qual aba está ativa e filtra
+            if (document.getElementById('abaAgendamentos').style.display !== 'none') {
+                filtrarAgendamentos(termo);
+            } else if (document.getElementById('abaClientes').style.display !== 'none') {
+                filtrarClientes(termo);
+            } else if (document.getElementById('abaServicos').style.display !== 'none') {
+                filtrarServicos(termo);
+            }
+        }
+
+        function limparPesquisa() {
+            document.getElementById('pesquisaGlobal').value = '';
+            pesquisarGlobal();
+        }
+
+        function filtrarAgendamentos(termo = '') {
+            const status = document.getElementById('filtroStatusAgendamento').value;
+            const data = document.getElementById('filtroDataAgendamento').value;
+            
+            let agendamentos = db.getAgendamentosCompletos();
+
+            // Filtro por termo de pesquisa
+            if (termo) {
+                agendamentos = agendamentos.filter(ag => 
+                    ag.clienteNome.toLowerCase().includes(termo.toLowerCase()) ||
+                    ag.servicoNome.toLowerCase().includes(termo.toLowerCase())
+                );
+            }
+
+            // Filtro por status
+            if (status) {
+                agendamentos = agendamentos.filter(ag => ag.status === status);
+            }
+
+            // Filtro por data
+            if (data) {
+                agendamentos = agendamentos.filter(ag => ag.data === data);
+            }
+
+            // Atualiza a tabela
+            const tbody = document.getElementById('tabelaAgendamentos');
+            
+            if (agendamentos.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 30px;">Nenhum agendamento encontrado</td></tr>';
+                return;
+            }
+
+            let html = '';
+            agendamentos.forEach(ag => {
+                const statusClass = {
+                    'pendente': 'status-pendente',
+                    'confirmado': 'status-confirmado',
+                    'cancelado': 'status-cancelado',
+                    'concluido': 'status-concluido'
+                }[ag.status] || 'status-pendente';
+
+                html += `
+                    <tr>
+                        <td>${ag.clienteNome}</td>
+                        <td>${ag.servicoNome}</td>
+                        <td>${new Date(ag.data).toLocaleDateString('pt-BR')}</td>
+                        <td>${ag.horario}</td>
+                        <td><span class="status-badge ${statusClass}">${ag.status.toUpperCase()}</span></td>
+                        <td>R$ ${ag.valor.toFixed(2)}</td>
+                        <td class="acoes">
+                            <button class="btn-acoes btn-visualizar" onclick="visualizarAgendamento(${ag.id})">👁️</button>
+                            <button class="btn-acoes btn-editar" onclick="editarAgendamento(${ag.id})">✏️</button>
+                            <button class="btn-acoes btn-status" onclick="alterarStatusAgendamento(${ag.id})">🔄</button>
+                            <button class="btn-acoes btn-excluir" onclick="confirmarExclusao('agendamento', ${ag.id})">🗑️</button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            tbody.innerHTML = html;
+        }
+
+        function filtrarClientes(termo = '') {
+            const filtroNome = document.getElementById('filtroNomeCliente')?.value || termo;
+            
+            let clientes = db.get('clientes');
+
+            if (filtroNome) {
+                clientes = clientes.filter(c => 
+                    c.nome.toLowerCase().includes(filtroNome.toLowerCase()) ||
+                    c.whatsapp.includes(filtroNome)
+                );
+            }
+
+            const tbody = document.getElementById('tabelaClientes');
+            
+            if (clientes.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 30px;">Nenhum cliente encontrado</td></tr>';
+                return;
+            }
+
+            let html = '';
+            clientes.forEach(cliente => {
+                html += `
+                    <tr>
+                        <td>${cliente.nome}</td>
+                        <td>${cliente.whatsapp}</td>
+                        <td>${cliente.email || '-'}</td>
+                        <td>${cliente.totalAgendamentos || 0}</td>
+                        <td>${cliente.ultimaVisita ? new Date(cliente.ultimaVisita).toLocaleDateString('pt-BR') : '-'}</td>
+                        <td class="acoes">
+                            <button class="btn-acoes btn-visualizar" onclick="visualizarCliente(${cliente.id})">👁️</button>
+                            <button class="btn-acoes btn-editar" onclick="editarCliente(${cliente.id})">✏️</button>
+                            <button class="btn-acoes btn-excluir" onclick="confirmarExclusao('cliente', ${cliente.id})">🗑️</button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            tbody.innerHTML = html;
+        }
+
+        function filtrarServicos(termo = '') {
+            const categoria = document.getElementById('filtroCategoriaServico')?.value || '';
+            
+            let servicos = db.get('servicos');
+
+            if (categoria) {
+                servicos = servicos.filter(s => s.categoria === categoria);
+            }
+
+            if (termo) {
+                servicos = servicos.filter(s => 
+                    s.nome.toLowerCase().includes(termo.toLowerCase()) ||
+                    (s.descricao && s.descricao.toLowerCase().includes(termo.toLowerCase()))
+                );
+            }
+
+            const tbody = document.getElementById('tabelaServicos');
+            
+            if (servicos.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 30px;">Nenhum serviço encontrado</td></tr>';
+                return;
+            }
+
+            const categoriaMap = {
+                'manicure': 'Manicure',
+                'pedicure': 'Pedicure',
+                'banho-gel': 'Banho de Gel',
+                'fibra': 'Unhas de Fibra',
+                'especiais': 'Especiais'
+            };
+
+            let html = '';
+            servicos.forEach(servico => {
+                html += `
+                    <tr>
+                        <td>${servico.nome}</td>
+                        <td>${categoriaMap[servico.categoria] || servico.categoria}</td>
+                        <td>R$ ${servico.preco.toFixed(2)}</td>
+                        <td>${servico.duracao} min</td>
+                        <td>${servico.descricao || '-'}</td>
+                        <td class="acoes">
+                            <button class="btn-acoes btn-visualizar" onclick="visualizarServico(${servico.id})">👁️</button>
+                            <button class="btn-acoes btn-editar" onclick="editarServico(${servico.id})">✏️</button>
+                            <button class="btn-acoes btn-excluir" onclick="confirmarExclusao('servico', ${servico.id})">🗑️</button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            tbody.innerHTML = html;
+        }
+
+        function limparFiltrosAgendamento() {
+            document.getElementById('filtroStatusAgendamento').value = '';
+            document.getElementById('filtroDataAgendamento').value = '';
+            filtrarAgendamentos();
+        }
+
+        // ============= FUNÇÕES DE AÇÃO =============
+        let acaoConfirmar = null;
+        let idItemParaExcluir = null;
+        let tipoItemParaExcluir = null;
+
+        function mostrarDialogConfirmacao(tipo, id) {
+            const dialog = document.getElementById('dialogConfirmar');
+            const titulo = document.getElementById('dialogTitulo');
+            const mensagem = document.getElementById('dialogMensagem');
+            const btnConfirmar = document.getElementById('dialogConfirmarBtn');
+
+            switch(tipo) {
+                case 'limparDados':
+                    titulo.textContent = 'Limpar Todos os Dados';
+                    mensagem.textContent = 'Tem certeza que deseja limpar todos os dados? Esta ação não pode ser desfeita!';
+                    btnConfirmar.onclick = limparTodosDados;
+                    break;
+                case 'excluir':
+                    titulo.textContent = 'Confirmar Exclusão';
+                    mensagem.textContent = 'Tem certeza que deseja excluir este item?';
+                    btnConfirmar.onclick = () => confirmarExclusaoItem();
+                    idItemParaExcluir = id;
+                    tipoItemParaExcluir = tipo;
+                    break;
+            }
+
+            dialog.style.display = 'block';
+        }
+
+        function fecharDialog() {
+            document.getElementById('dialogConfirmar').style.display = 'none';
+            idItemParaExcluir = null;
+            tipoItemParaExcluir = null;
+        }
+
+        function confirmarExclusao(tipo, id) {
+            tipoItemParaExcluir = tipo;
+            idItemParaExcluir = id;
+            mostrarDialogConfirmacao('excluir', id);
+        }
+
+        function confirmarExclusaoItem() {
+            if (idItemParaExcluir && tipoItemParaExcluir) {
+                db.remover(tipoItemParaExcluir + 's', idItemParaExcluir);
+                
+                // Atualizar a tabela correspondente
+                switch(tipoItemParaExcluir) {
+                    case 'agendamento':
+                        atualizarTabelaAgendamentos();
+                        break;
+                    case 'cliente':
+                        atualizarTabelaClientes();
+                        break;
+                    case 'servico':
+                        atualizarTabelaServicos();
+                        break;
+                }
+                
+                fecharDialog();
+                alert('Item excluído com sucesso!');
+            }
+        }
+
+        function limparTodosDados() {
+            db.limparTodosDados();
+            fecharDialog();
+            atualizarTabelaAgendamentos();
+            atualizarTabelaClientes();
+            atualizarTabelaServicos();
+            atualizarTabelaHistorico();
+            atualizarEstatisticas();
+            alert('Todos os dados foram resetados!');
+        }
+
+        function alterarStatusAgendamento(id) {
+            const agendamento = db.get('agendamentos').find(a => a.id === id);
+            if (!agendamento) return;
+
+            const statusMap = {
+                'pendente': 'confirmado',
+                'confirmado': 'concluido',
+                'concluido': 'cancelado',
+                'cancelado': 'pendente'
+            };
+
+            const novoStatus = statusMap[agendamento.status] || 'pendente';
+            db.atualizar('agendamentos', id, { status: novoStatus });
+            atualizarTabelaAgendamentos();
+            atualizarEstatisticas();
+            alert(`Status alterado para: ${novoStatus}`);
+        }
+
+        // ============= FUNÇÕES DE VISUALIZAÇÃO =============
+        function visualizarAgendamento(id) {
+            const agendamentos = db.getAgendamentosCompletos();
+            const agendamento = agendamentos.find(a => a.id === id);
+            
+            if (!agendamento) return;
+
+            const conteudo = `
+                <p><strong>Cliente:</strong> ${agendamento.clienteNome}</p>
+                <p><strong>Serviço:</strong> ${agendamento.servicoNome}</p>
+                <p><strong>Data:</strong> ${new Date(agendamento.data).toLocaleDateString('pt-BR')}</p>
+                <p><strong>Horário:</strong> ${agendamento.horario}</p>
+                <p><strong>Status:</strong> <span class="status-badge ${agendamento.status}">${agendamento.status}</span></p>
+                <p><strong>Valor:</strong> R$ ${agendamento.valor.toFixed(2)}</p>
+                <p><strong>Observações:</strong> ${agendamento.observacoes || 'Nenhuma'}</p>
+            `;
+
+            document.getElementById('visualizarTitulo').textContent = 'Detalhes do Agendamento';
+            document.getElementById('visualizarConteudo').innerHTML = conteudo;
+            document.getElementById('dialogVisualizar').style.display = 'block';
+        }
+
+        function visualizarCliente(id) {
+            const cliente = db.get('clientes').find(c => c.id === id);
+            
+            if (!cliente) return;
+
+            const conteudo = `
+                <p><strong>Nome:</strong> ${cliente.nome}</p>
+                <p><strong>WhatsApp:</strong> ${cliente.whatsapp}</p>
+                <p><strong>Email:</strong> ${cliente.email || 'Não informado'}</p>
+                <p><strong>Data de Nascimento:</strong> ${cliente.nascimento ? new Date(cliente.nascimento).toLocaleDateString('pt-BR') : 'Não informada'}</p>
+                <p><strong>Total de Agendamentos:</strong> ${cliente.totalAgendamentos || 0}</p>
+                <p><strong>Última Visita:</strong> ${cliente.ultimaVisita ? new Date(cliente.ultimaVisita).toLocaleDateString('pt-BR') : 'Nunca'}</p>
+            `;
+
+            document.getElementById('visualizarTitulo').textContent = 'Detalhes do Cliente';
+            document.getElementById('visualizarConteudo').innerHTML = conteudo;
+            document.getElementById('dialogVisualizar').style.display = 'block';
+        }
+
+        function visualizarServico(id) {
+            const servico = db.get('servicos').find(s => s.id === id);
+            
+            if (!servico) return;
+
+            const categoriaMap = {
+                'manicure': 'Manicure',
+                'pedicure': 'Pedicure',
+                'banho-gel': 'Banho de Gel',
+                'fibra': 'Unhas de Fibra',
+                'especiais': 'Especiais'
+            };
+
+            const conteudo = `
+                <p><strong>Serviço:</strong> ${servico.nome}</p>
+                <p><strong>Categoria:</strong> ${categoriaMap[servico.categoria] || servico.categoria}</p>
+                <p><strong>Preço:</strong> R$ ${servico.preco.toFixed(2)}</p>
+                <p><strong>Duração:</strong> ${servico.duracao} minutos</p>
+                <p><strong>Descrição:</strong> ${servico.descricao || 'Não informada'}</p>
+            `;
+
+            document.getElementById('visualizarTitulo').textContent = 'Detalhes do Serviço';
+            document.getElementById('visualizarConteudo').innerHTML = conteudo;
+            document.getElementById('dialogVisualizar').style.display = 'block';
+        }
+
+        function fecharDialogVisualizar() {
+            document.getElementById('dialogVisualizar').style.display = 'none';
+        }
+
+        // ============= FUNÇÕES DE EXPORTAÇÃO/IMPORTAÇÃO =============
+        function exportarDados() {
+            db.exportarDados();
+        }
+
+        function importarDados() {
+            document.getElementById('fileInput').click();
+        }
+
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            db.importarDados(file)
+                .then(() => {
+                    alert('Dados importados com sucesso!');
+                    atualizarTabelaAgendamentos();
+                    atualizarTabelaClientes();
+                    atualizarTabelaServicos();
+                    atualizarTabelaHistorico();
+                    atualizarEstatisticas();
+                })
+                .catch(error => {
+                    alert('Erro ao importar dados: ' + error);
+                });
+
+            // Limpar input
+            e.target.value = '';
+        });
+
+        // ============= FUNÇÕES DE EDIÇÃO =============
+        function editarAgendamento(id) {
+            alert('Função de edição será implementada em breve!');
+        }
+
+        function editarCliente(id) {
+            alert('Função de edição será implementada em breve!');
+        }
+
+        function editarServico(id) {
+            alert('Função de edição será implementada em breve!');
+        }
+
+        // ============= INICIALIZAÇÃO DA PÁGINA =============
+        window.onload = function() {
+            db.atualizarDashboard();
+            atualizarTabelaAgendamentos();
+            mostrarAba('agendamentos');
+        };
+    </script>
+</body>
+</html>

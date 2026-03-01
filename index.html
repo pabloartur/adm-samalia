@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Agendar unhas - Samalia Profissional de Estética">
+    <meta name="keywords" content="Agendar,unhas,estetica,manicure,pedicure">
+    <meta name="author" content="Pablo Leal">
+    <title>Samalia - Especialista em Unhas</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        h1 {
+            color: #4a1d6d;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            animation: fadeInDown 1s ease;
+        }
+
+        h2 {
+            color: #5a2d7d;
+            font-size: 2em;
+            margin: 30px 0 20px;
+            border-left: 5px solid #9b59b6;
+            padding-left: 15px;
+        }
+
+        p {
+            color: #333;
+            line-height: 1.8;
+            font-size: 1.1em;
+            margin-bottom: 25px;
+            text-align: justify;
+        }
+
+        .destaque {
+            background: linear-gradient(45deg, #f3e5f5, #e1bee7);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border-left: 5px solid #9b59b6;
+            font-weight: 500;
+        }
+
+        .destaque strong {
+            color: #4a1d6d;
+            font-size: 1.2em;
+        }
+
+        .galeria {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            max-width: 300px;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            text-align: center;
+            margin: 10px 0 0;
+            color: #4a1d6d;
+            font-weight: bold;
+        }
+
+        .botoes-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            min-width: 200px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #9b59b6, #8e44ad);
+            color: white;
+            box-shadow: 0 4px 15px rgba(142, 68, 173, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(142, 68, 173, 0.6);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        .btn-secondary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.6);
+        }
+
+        .btn-success {
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+            color: white;
+            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.4);
+        }
+
+        .btn-success:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(46, 204, 113, 0.6);
+        }
+
+        /* Caixa de Diálogo */
+        .dialog-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .dialog-box {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.3);
+            max-width: 400px;
+            width: 90%;
+            z-index: 1001;
+            animation: slideIn 0.4s ease;
+        }
+
+        .dialog-box h3 {
+            color: #4a1d6d;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .dialog-box input,
+        .dialog-box select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+
+        .dialog-box input:focus,
+        .dialog-box select:focus {
+            outline: none;
+            border-color: #9b59b6;
+        }
+
+        .dialog-box textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .dialog-box textarea:focus {
+            outline: none;
+            border-color: #9b59b6;
+        }
+
+        .dialog-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            justify-content: flex-end;
+        }
+
+        .dialog-buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-confirm {
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+            color: white;
+        }
+
+        .btn-confirm:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-cancel {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+        }
+
+        .btn-cancel:hover {
+            transform: scale(1.05);
+        }
+
+        hr {
+            border: none;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #9b59b6, transparent);
+            margin: 30px 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -60%);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2em; }
+            h2 { font-size: 1.5em; }
+            .container { padding: 20px; }
+            .btn { min-width: 150px; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Conteúdo Principal -->
+        <h1>Samalia - Estética & Beleza</h1>
+        
+        <div class="destaque">
+            <p>Com mais de <strong>10 anos de experiência no ramo da estética</strong>, <strong>Samalia é <i>manicure e pedicure</i> que entende que as mãos e os pés são cartões de visita.</strong> Especialista em cutilagem precisa, esmaltação perfeita e cuidados com a saúde das unhas, ela oferece um serviço de alta qualidade em um ambiente descontraído. Na Samalia, cada cliente sai não apenas com as unhas impecáveis, mas também com a sensação de bem-estar e renovação.</p>
+        </div>
+
+        <hr>
+
+        <h2>Nossos Modelos de Unhas</h2>
+        <p>Vão desde <i>esmaltação a unhas em banho de gel</i> além de unhas de fibra. Com produtos de primeira linha pra oferecer o máximo de tecnologia e conforto às suas clientes.</p>
+
+        <!-- Galeria de Imagens -->
+        <div class="galeria">
+            <div class="card">
+                <img src="img/unha.jpeg" alt="Modelo de unha 1" onerror="this.src='https://via.placeholder.com/300x250/9b59b6/ffffff?text=Unha+1'">
+                <p>Esmaltação Perfeita</p>
+            </div>
+            
+            <div class="card">
+                <img src="img/unha2.jpeg" alt="Modelo de unha 2" onerror="this.src='https://via.placeholder.com/300x250/8e44ad/ffffff?text=Unha+2'">
+                <p>Banho de Gel</p>
+            </div>
+            
+            <div class="card">
+                <img src="img/foto.jpeg" alt="Samalia" onerror="this.src='https://via.placeholder.com/300x250/6c3483/ffffff?text=Samalia'">
+                <p>Samalia - Especialista</p>
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- Botões Melhorados -->
+        <div class="botoes-container">
+            <a href="https://maps.app.goo.gl/7Ke7zZx1L5xy5kXR8" target="_blank" class="btn btn-primary">
+                📍 Localização
+            </a>
+            
+            <a href="valores.html"  class="btn btn-secondary">
+                💰 Nossos Valores
+            </a>
+        <a href="ADM.html"  class="btn btn-secondary">
+                ✨ADM✨
+            </a>
+        
+            </button>
+        </div>
+
+        <hr>
+
+        <!-- Informações Adicionais -->
+        <div style="text-align: center; color: #666; padding: 10px;">
+            <p>✨ Ambiente descontraído e profissional | Produtos de primeira linha | Atendimento personalizado ✨</p>
+            <p style="margin-top: 10px;">📞 WhatsApp: (99) 984676312</p>
+        </div>
+    </div>
+
+        
+    </script>
+</body>
+</html>

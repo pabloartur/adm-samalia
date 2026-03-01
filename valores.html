@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Tabela de valores dos procedimentos de unhas e estética">
+    <meta name="keywords" content="valores,preços,tabela,unhas,estetica,manicure,pedicure">
+    <meta name="author" content="Pablo Leal">
+    <title>Samalia - Tabela de Valores</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #43a047 0%, #2e7d32 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            padding: 30px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            color: #1b5e20;
+            font-size: 2.8em;
+            margin-bottom: 20px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            animation: fadeInDown 0.8s ease;
+            position: relative;
+        }
+
+        h1:after {
+            content: "💅";
+            display: block;
+            font-size: 0.8em;
+            margin-top: 10px;
+        }
+
+        h2 {
+            color: #2e7d32;
+            font-size: 2.2em;
+            margin: 40px 0 30px;
+            border-left: 6px solid #43a047;
+            padding-left: 20px;
+            background: linear-gradient(90deg, rgba(67,160,71,0.1), transparent);
+        }
+
+        h3 {
+            color: #1b5e20;
+            font-size: 1.5em;
+            margin: 30px 0 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3 i {
+            font-size: 1.2em;
+        }
+
+        /* Cards de Preços */
+        .tabela-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .card-preco {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(67,160,71,0.2);
+        }
+
+        .card-preco:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            border-color: #43a047;
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #43a047, #2e7d32);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .card-header h3 {
+            color: white;
+            margin: 0;
+            font-size: 1.8em;
+            justify-content: center;
+        }
+
+        .card-header p {
+            color: rgba(255,255,255,0.9);
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+
+        .card-body {
+            padding: 25px;
+        }
+
+        .servico-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px dashed #e0e0e0;
+        }
+
+        .servico-item:last-child {
+            border-bottom: none;
+        }
+
+        .servico-nome {
+            font-size: 1.1em;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .servico-preco {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #2e7d32;
+            background: rgba(67,160,71,0.1);
+            padding: 5px 15px;
+            border-radius: 50px;
+        }
+
+        .preco-antigo {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 0.9em;
+            margin-right: 10px;
+        }
+
+        .desconto {
+            background: #f44336;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            margin-left: 10px;
+        }
+
+        /* Tabela Estilizada */
+        .tabela-estilizada {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .tabela-estilizada th {
+            background: linear-gradient(135deg, #43a047, #2e7d32);
+            color: white;
+            padding: 15px;
+            font-size: 1.1em;
+            text-align: left;
+        }
+
+        .tabela-estilizada td {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            color: #333;
+        }
+
+        .tabela-estilizada tr:hover {
+            background: rgba(67,160,71,0.05);
+        }
+
+        .tabela-estilizada .destaque {
+            background: rgba(67,160,71,0.1);
+            font-weight: bold;
+        }
+
+        /* Badges */
+        .badge {
+            background: #43a047;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            margin-left: 10px;
+        }
+
+        .badge-promo {
+            background: #f44336;
+        }
+
+        /* Botão Voltar */
+        .btn-voltar {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #43a047, #2e7d32);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin: 30px 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(67,160,71,0.4);
+            border: 2px solid transparent;
+        }
+
+        .btn-voltar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(67,160,71,0.6);
+            background: transparent;
+            color: #2e7d32;
+            border-color: #2e7d32;
+        }
+
+        hr {
+            border: none;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #43a047, #2e7d32, #43a047, transparent);
+            margin: 40px 0;
+        }
+
+        /* Informações Adicionais */
+        .info-pagamento {
+            background: linear-gradient(135deg, #f1f8e9, #dcedc8);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 40px 0;
+            border: 2px dashed #43a047;
+        }
+
+        .info-pagamento h4 {
+            color: #1b5e20;
+            font-size: 1.4em;
+            margin-bottom: 20px;
+        }
+
+        .metodos-pagamento {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .metodo-item {
+            background: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2em; }
+            h2 { font-size: 1.8em; }
+            .container { padding: 20px; }
+            .tabela-estilizada { font-size: 0.9em; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>💅 Tabela de Valores</h1>
+        
+        <hr>
+
+        <h2>✨ Procedimentos de Unhas</h2>
+        
+        <div class="tabela-container">
+            <!-- Card Manicure/Pedicure -->
+            <div class="card-preco">
+                <div class="card-header">
+                    <h3>💅 Manicure & Pedicure</h3>
+                    <p>Cuidados completos para mãos e pés</p>
+                </div>
+                <div class="card-body">
+                    <!--valores antigos-->
+                    <div class="servico-item">
+                        <span class="servico-nome">💅 Manicure simples</span>
+                        <span class="servico-preco">R$ 35,00</span>
+                    </div>
+                    <div class="servico-item">
+                        <span class="servico-nome">🦶 Pedicure simples</span>
+                        <span class="servico-preco">R$ 40,00</span>
+                    </div>
+                    <div class="servico-item">
+                        <span class="servico-nome">✨ Combo (Mãos + Pés)</span>
+                        <span class="servico-preco">R$ 70,00</span>
+                        <span class="badge badge-promo">ECONOMIZE R$5</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card Banho de Gel -->
+            <div class="card-preco">
+                <div class="card-header">
+                    <h3>💎 Banho de Gel</h3>
+                    <p>Durabilidade e brilho intenso</p>
+                </div>
+                <div class="card-body">
+                    <div class="servico-item">
+                        <span class="servico-nome">💅 Banho de Gel - Mãos</span>
+                        <span class="servico-preco">R$ 80,00</span>
+                    </div>
+                    <div class="servico-item">
+                        <span class="servico-nome">🦶 Banho de Gel - Pés</span>
+                        <span class="servico-preco">R$ 85,00</span>
+                    </div>
+                    <div class="servico-item">
+                        <span class="servico-nome">✨ Combo Mãos + Pés</span>
+                        <span class="servico-preco">R$ 155,00</span>
+                        <span class="badge">ECONOMIZE R$10</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card Unhas de Fibra -->
+            <div class="card-preco">
+                <div class="card-header">
+                    <h3>🧬 Unhas de Fibra</h3>
+                    <p>Alongamento e resistência</p>
+                </div>
+                <div class="card-body">
+                    <div class="servico-item">
+                        <span class="servico-nome">📏 Fibra curta</span>
+                        <span class="servico-preco">R$ 120,00</span>
+                    </div>
+                    <div class="servico-item">
+                        <span class="servico-nome">📐 Fibra média</span>
+                        <span class="servico-preco">R$ 140,00</span>
+                    </div>
+                    <div class="servico-item">
+                        <span class="servico-nome">📏 Fibra longa</span>
+                        <span class="servico-preco">R$ 160,00</span>
+                    </div>
+                    <div class="servico-item">
+                        <span class="servico-nome">🔄 Manutenção</span>
+                        <span class="servico-preco">R$ 90,00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2>📋 Tabela Completa de Serviços</h2>
+        
+        <table class="tabela-estilizada">
+            <thead>
+                <tr>
+                    <th>Procedimento</th>
+                    <th>Descrição</th>
+                    <th>Valor</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="destaque">
+                    <td colspan="3"><strong>💅 MANICURE</strong></td>
+                </tr>
+                <tr>
+                    <td>Manicure Tradicional</td>
+                    <td>Corte, lixamento, cutilagem e esmaltação</td>
+                    <td><strong>R$ 35,00</strong></td>
+                </tr>
+                <tr>
+                    <td>Manicure em banho de gel</td>
+                    <td>Esmaltação em gel com maior durabilidade</td>
+                    <td><strong>R$ 80,00</strong></td>
+                </tr>
+                <tr>
+                    <td>Francesinha</td>
+                    <td>Esmaltação francesa tradicional</td>
+                    <td><strong>R$ 45,00</strong></td>
+                </tr>
+                <tr>
+                    <td>Esmaltação decorada</td>
+                    <td>Desenhos e adereços</td>
+                    <td><strong>R$ 50,00</strong></td>
+                </tr>
+                
+                <tr class="destaque">
+                    <td colspan="3"><strong>🦶 PEDICURE</strong></td>
+                </tr>
+                <tr>
+                    <td>Pedicure Tradicional</td>
+                    <td>Corte, lixamento, cutilagem e esmaltação</td>
+                    <td><strong>R$ 40,00</strong></td>
+                </tr>
+                <tr>
+                    <td>Pedicure em banho de gel</td>
+                    <td>Esmaltação em gel para pés</td>
+                    <td><strong>R$ 85,00</strong></td>
+                </tr>
+                <tr>
+                    <td>Pedicure com esfoliação</td>
+                    <td>Inclui esfoliação e hidratação</td>
+                    <td><strong>R$ 55,00</strong></td>
+                </tr>
+                
+                <tr class="destaque">
+                    <td colspan="3"><strong>🧬 ALONGAMENTO</strong></td>
+                </tr>
+                <tr>
+                    <td>Unhas de fibra - Curta</td>
+                    <td>Alongamento em fibra de vidro</td>
+                    <td><strong>R$ 120,00</strong></td>
+                </tr>
+                <tr>
+                    <td>Unhas de fibra - Média</td>
+                    <td>Alongamento em fibra de vidro</td>
+                    <td><strong>R$ 140,00</strong></td>
+                </tr>
+                <tr>
+                    <td>Unhas de fibra - Longa</td>
+                    <td>Alongamento em fibra de vidro</td>
+                    <td><strong>R$ 160,00</strong></td>
+                </tr>
+                <tr>
+                    <td>Manutenção de fibra</td>
+                    <td>Revisão e reparo</td>
+                    <td><strong>R$ 90,00</strong></td>
+                </tr>
+                <tr>
+                    <td>Remoção de fibra</td>
+                    <td>Remoção profissional</td>
+                    <td><strong>R$ 50,00</strong></td>
+            </tbody>
+        </table>
+
+        <!-- Informações de Pagamento -->
+        <div class="info-pagamento">
+            <h4>💰 Formas de Pagamento</h4>
+            <div class="metodos-pagamento">
+                <div class="metodo-item">💵 Dinheiro</div>
+                <div class="metodo-item">💳 Cartão de Crédito</div>
+                <div class="metodo-item">💳 Cartão de Débito</div>
+                <div class="metodo-item">📱 PIX</div>
+                <div class="metodo-item">📲 Transferência</div>
+            </div>
+            <p style="text-align: center; margin-top: 20px; color: #1b5e20;">
+                <strong>✨ Parcelamento em até 3x sem juros nos cartões ✨</strong><br>
+            </p>
+        </div>
+
+        <hr>
+
+        <!-- Botão Voltar -->
+        <div style="text-align: center;">
+            <a href="index.html" class="btn-voltar">← Voltar para Página Inicial</a>
+        </div>
+
+        <div style="text-align: center; color: #666; margin-top: 30px; padding: 20px; border-top: 1px solid #e0e0e0;">
+            <p>💅 Valores sujeitos a alteração terão aviso previo caso ocorra correção</p>
+            <p>📞 Agende seu horário: (99) 984676312 | 📱 WhatsApp</p>
+            <p>⭐ Aceitamos todos os cartões e PIX ⭐</p>
+        </div>
+    </div>
+</body>
+</html>
